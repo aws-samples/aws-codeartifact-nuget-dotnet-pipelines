@@ -1,0 +1,16 @@
+version: '0.2'
+phases:
+  install:
+    runtime-versions:
+      dotnet: '3.1'
+    commands:
+      # install the CodeArtifact Credential Provider
+      - 'export PATH="$PATH:/root/.dotnet/tools"'
+      - dotnet tool install --add-source https://api.nuget.org/v3/index.json --ignore-failed-sources -g AWS.CodeArtifact.NuGet.CredentialProvider
+      - dotnet codeartifact-creds install
+  build:
+    commands:
+      # restore packages from CodeArtifact
+      - dotnet restore
+      - dotnet build
+      - dotnet run
